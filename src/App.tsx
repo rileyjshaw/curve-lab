@@ -241,7 +241,9 @@ function App() {
 							);
 						})
 					) : (
-						<p>There are no settings available for this curve.</p>
+						<p className="text-sm text-gray-500">
+							There are no settings available for this curve.
+						</p>
 					)}
 				</section>
 				<Tooltip

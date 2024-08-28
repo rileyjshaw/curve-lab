@@ -19,21 +19,21 @@ function CurveTypeSelector({
 				onChange={(curveType) => setCurveId(curveType.id)}
 				className="grid grid-cols-2 gap-2 md:gap-4 md:grid-cols-5"
 			>
-				{curveTypes.map((mailingList) => (
+				{curveTypes.map((curveType) => (
 					<Radio
-						key={mailingList.id}
-						value={mailingList}
-						aria-label={mailingList.title}
-						aria-description={mailingList.description}
+						key={curveType.id}
+						value={curveType}
+						aria-label={curveType.title}
+						aria-description={curveType.description}
 						className="group relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[focus]:border-cobalt-600 data-[focus]:ring-2 data-[focus]:ring-cobalt-600"
 					>
 						<span className="flex flex-1">
 							<span className="flex flex-col">
 								<span className="block text-sm font-medium text-gray-900">
-									{mailingList.title}
+									{curveType.title}
 								</span>
 								<span className="mt-1 flex items-center text-sm text-gray-500">
-									{mailingList.description}
+									{curveType.description}
 								</span>
 							</span>
 						</span>
