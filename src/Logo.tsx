@@ -139,7 +139,7 @@ const WrappedLogo = React.memo(
 
 		const LogoComponent = props.isWordmark ? Wordmark : Logo;
 		return (
-			<div>
+			<div className="flex flex-wrap justify-between">
 				<TransformWrapper
 					ref={ref}
 					minScale={0.5}
@@ -152,9 +152,37 @@ const WrappedLogo = React.memo(
 							globalSettings={props.globalSettings}
 							curvePath={curvePath}
 							curveTransform={props.curveTransform}
-						/>{' '}
+						/>
 					</TransformComponent>
 				</TransformWrapper>
+				{!props.isWordmark && (
+					<>
+						<LogoComponent
+							width={width / 2}
+							globalSettings={props.globalSettings}
+							curvePath={curvePath}
+							curveTransform={props.curveTransform}
+						/>
+						<LogoComponent
+							width={width / 4}
+							globalSettings={props.globalSettings}
+							curvePath={curvePath}
+							curveTransform={props.curveTransform}
+						/>
+						<LogoComponent
+							width={width / 8}
+							globalSettings={props.globalSettings}
+							curvePath={curvePath}
+							curveTransform={props.curveTransform}
+						/>
+						<LogoComponent
+							width={width / 16}
+							globalSettings={props.globalSettings}
+							curvePath={curvePath}
+							curveTransform={props.curveTransform}
+						/>
+					</>
+				)}
 			</div>
 		);
 	})
