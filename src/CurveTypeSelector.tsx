@@ -29,10 +29,10 @@ function CurveTypeSelector({
 					>
 						<span className="flex flex-1">
 							<span className="flex flex-col">
-								<span className="block text-sm font-medium text-gray-900">
+								<span className="block text-sm font-medium text-gray-900 text-pretty">
 									{curveType.title}
 								</span>
-								<span className="mt-1 flex items-center text-sm text-gray-500">
+								<span className="mt-1 flex items-center text-sm text-gray-500 text-pretty">
 									{curveType.description}
 								</span>
 							</span>
