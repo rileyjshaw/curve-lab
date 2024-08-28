@@ -14,8 +14,6 @@ import Logo from './Logo';
 import { curveTypes, globalSettingsConfig, notchLocations } from './constants';
 import Slider from './Slider';
 
-import './App.css';
-
 interface State {
 	curveId: number;
 	allCurveSettings: number[][];
@@ -142,7 +140,7 @@ function App() {
 
 		const downloadLink = document.createElement('a');
 		downloadLink.href = svgUrl;
-		downloadLink.download = 'image.svg';
+		downloadLink.download = 'logo.svg';
 		document.body.appendChild(downloadLink);
 		downloadLink.click();
 		document.body.removeChild(downloadLink);
