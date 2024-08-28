@@ -118,7 +118,7 @@ export const curveTypes: CurveType[] = [
 				min: 0.25,
 				max: 1.5,
 				step: 0.01,
-				defaultValue: 1,
+				defaultValue: 0.9,
 			},
 			{
 				label: 'Rotation',
@@ -143,7 +143,7 @@ export const curveTypes: CurveType[] = [
 				label: 'Radius',
 				min: 20,
 				max: 100,
-				defaultValue: 40,
+				defaultValue: 25,
 			},
 			{
 				label: 'Rotation',
