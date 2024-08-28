@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::selection {
+	@apply bg-cobalt-100;
+}
+
+body {
+	@apply text-gray-900;
+}
+
+.constrain-x {
+	@apply max-w-screen-xl mx-auto px-2 xl:border-x border-x-cobalt-200 border-dashed w-full;
+}
+
+section {
+	@apply pt-6;
+}
+
+h2 {
+	@apply text-sm uppercase font-light mb-2;
+}
+
+a[target='_blank'] {
+	@apply cursor-alias;
+}
+
+a[target='_blank']::after {
+	content: ' ↗';
+}
+
+px-0 {
+	@apply px-0;
+}
