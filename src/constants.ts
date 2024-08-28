@@ -82,7 +82,7 @@ export const curveTypes: CurveType[] = [
 	},
 	{
 		title: 'Sine curve',
-		description: 'Familiar but difficult to edit.',
+		description: 'Tricky to make with SVG.',
 		path: (
 			curveHeight: number,
 			period: number,
