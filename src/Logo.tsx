@@ -9,10 +9,14 @@ interface LogoProps {
 	curveTransform?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Wordmark({ width, curvePath, curveTransform, ...rest }: LogoProps) {
+const Wordmark = React.forwardRef(function Wordmark(
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	{ width, curvePath, curveTransform, globalSettings, ...rest }: LogoProps,
+	ref: React.Ref<SVGSVGElement>
+) {
 	return (
 		<svg
+			ref={ref}
 			viewBox="0 0 815 168"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
@@ -64,18 +68,16 @@ function Wordmark({ width, curvePath, curveTransform, ...rest }: LogoProps) {
 			</g>
 		</svg>
 	);
-}
+});
 
-function Logo({
-	width,
-	globalSettings,
-	curvePath,
-	curveTransform,
-	...rest
-}: LogoProps) {
+const Logo = React.forwardRef(function Logo(
+	{ width, globalSettings, curvePath, curveTransform, ...rest }: LogoProps,
+	ref: React.Ref<SVGSVGElement>
+) {
 	const strokeWidth = globalSettings[0];
 	return (
 		<svg
+			ref={ref}
 			viewBox="0 0 100 100"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
@@ -114,9 +116,10 @@ function Logo({
 			<use href="#outer-circle" />
 		</svg>
 	);
-}
+});
 
 interface WrappedLogoProps {
+	downloadRef: React.RefObject<SVGSVGElement>;
 	width: number | null;
 	isWordmark?: boolean;
 	globalSettings: number[];
@@ -140,21 +143,24 @@ const WrappedLogo = React.memo(
 		const LogoComponent = props.isWordmark ? Wordmark : Logo;
 		return (
 			<div className="flex flex-wrap justify-between">
-				<TransformWrapper
-					ref={ref}
-					minScale={0.5}
-					maxScale={100}
-					centerZoomedOut={false}
-				>
-					<TransformComponent>
-						<LogoComponent
-							width={width}
-							globalSettings={props.globalSettings}
-							curvePath={curvePath}
-							curveTransform={props.curveTransform}
-						/>
-					</TransformComponent>
-				</TransformWrapper>
+				<div className="cursor-grab active:cursor-grabbing">
+					<TransformWrapper
+						ref={ref}
+						minScale={0.5}
+						maxScale={100}
+						centerZoomedOut={false}
+					>
+						<TransformComponent>
+							<LogoComponent
+								ref={props.downloadRef}
+								width={width}
+								globalSettings={props.globalSettings}
+								curvePath={curvePath}
+								curveTransform={props.curveTransform}
+							/>
+						</TransformComponent>
+					</TransformWrapper>
+				</div>
 				{!props.isWordmark && (
 					<>
 						<LogoComponent

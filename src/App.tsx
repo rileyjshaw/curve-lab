@@ -73,6 +73,7 @@ const useStore = create<State>()(
 function App() {
 	const [logoRef, logoSize] = useMeasure();
 	const transformWrapperRef = useRef<ReactZoomPanPinchRef | null>(null);
+	const downloadRef = useRef<SVGSVGElement | null>(null);
 	const {
 		curveId,
 		setCurveId,
@@ -129,6 +130,26 @@ function App() {
 		setCurveId(id);
 	}
 
+	function downloadSvg() {
+		const svgElement = downloadRef.current;
+		if (!svgElement) return;
+
+		const svgData = new XMLSerializer().serializeToString(svgElement);
+		const svgBlob = new Blob([svgData], {
+			type: 'image/svg+xml;charset=utf-8',
+		});
+		const svgUrl = URL.createObjectURL(svgBlob);
+
+		const downloadLink = document.createElement('a');
+		downloadLink.href = svgUrl;
+		downloadLink.download = 'image.svg';
+		document.body.appendChild(downloadLink);
+		downloadLink.click();
+		document.body.removeChild(downloadLink);
+
+		URL.revokeObjectURL(svgUrl);
+	}
+
 	// function getTransform() {
 	// 	if (ref.current) {
 	// 		console.log(
@@ -179,12 +200,10 @@ function App() {
 						</Tooltip>
 					</div>
 					{
-						<div
-							ref={logoRef}
-							className="cursor-grab active:cursor-grabbing"
-						>
+						<div ref={logoRef}>
 							<Logo
 								ref={transformWrapperRef}
+								downloadRef={downloadRef}
 								width={
 									isWordmark
 										? logoSize.width
@@ -289,6 +308,33 @@ function App() {
 						})}
 					</section>
 				</Tooltip>
+				<section>
+					<div className="flex justify-between items-center flex-wrap">
+						<h2>Controls</h2>
+					</div>
+					<div className="flex flex-wrap gap-4">
+						<Button
+							onPress={downloadSvg}
+							color="primary"
+							radius="sm"
+							size="sm"
+						>
+							Export SVG
+						</Button>
+						<Button
+							onPress={() => {
+								resetCurrentSettings();
+								resetGlobalSettings();
+								resetZoom();
+							}}
+							color="warning"
+							radius="sm"
+							size="sm"
+						>
+							Reset all
+						</Button>
+					</div>
+				</section>
 			</main>
 		</div>
 	);

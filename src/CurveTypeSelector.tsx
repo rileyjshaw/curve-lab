@@ -25,7 +25,7 @@ function CurveTypeSelector({
 						value={curveType}
 						aria-label={curveType.title}
 						aria-description={curveType.description}
-						className="group relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[focus]:border-cobalt-600 data-[focus]:ring-2 data-[focus]:ring-cobalt-600"
+						className="group relative flex cursor-pointer rounded-md border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[focus]:border-cobalt-600 data-[focus]:ring-2 data-[focus]:ring-cobalt-600"
 					>
 						<span className="flex flex-1">
 							<span className="flex flex-col">
@@ -43,7 +43,7 @@ function CurveTypeSelector({
 						/>
 						<span
 							aria-hidden="true"
-							className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-cobalt-600"
+							className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-cobalt-600"
 						/>
 					</Radio>
 				))}
