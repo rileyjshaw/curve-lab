@@ -1,5 +1,3 @@
-'use client';
-
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/20/solid';
 
