@@ -41,7 +41,7 @@ function Slider({
 			defaultValue={defaultValue}
 			color="primary"
 			classNames={{
-				base: 'max-w-md pl-4 mt-4',
+				base: 'pl-4 mt-4',
 				label: 'text-sm font-semibold',
 			}}
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,7 +54,7 @@ function Slider({
 						placement="left"
 					>
 						<input
-							className="px-1 py-0.5 w-12 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-md border-medium border-transparent hover:border-primary focus:border-primary disabled:border-none"
+							className="px-1 py-0.5 w-12 text-center text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-md border-medium border-transparent hover:border-primary focus:border-primary disabled:border-none"
 							type="text"
 							disabled={isDisabled}
 							value={inputValue}

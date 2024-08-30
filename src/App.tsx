@@ -155,7 +155,7 @@ function App() {
 	return (
 		<div className="min-h-dvh flex flex-col">
 			<Header />
-			<main className="constrain-x pt-2 grow">
+			<main className="constrain-x grow">
 				<section>
 					<div className="flex justify-between items-center mb-4 flex-wrap">
 						<h2 className="mb-0">Logo</h2>
@@ -187,11 +187,11 @@ function App() {
 							</Tooltip>
 							<Button
 								onPress={resetZoom}
-								className="px-0"
 								size="sm"
 								radius="sm"
 								color="primary"
 								variant="light"
+								className="px-1 min-w-0 w-12"
 							>
 								<RotateCcw size={20} />
 							</Button>
@@ -223,87 +223,111 @@ function App() {
 					/>
 				</section>
 				{!isWordmark && (
-					<>
-						<section>
-							<div className="flex justify-between items-center flex-wrap">
-								<h2 className="mb-0">Curve settings</h2>
-								<Button
-									isDisabled={!curveSettingsConfig.length}
-									size="sm"
-									radius="sm"
-									color="primary"
-									variant="light"
-									onPress={resetSelectedCurveSettings}
-									className="px-0"
-								>
-									<RotateCcw size={20} />
-								</Button>
-							</div>
-							{curveSettingsConfig.length ? (
-								curveSettingsConfig.map((settings, index) => {
+					<div className="grid gap-x-16 md:grid-cols-2">
+						<div className="pr-4 md:pr-0">
+							<section>
+								<div className="flex justify-between items-center flex-wrap">
+									<h2 className="mb-0">Curve settings</h2>
+									<Button
+										isDisabled={!curveSettingsConfig.length}
+										size="sm"
+										radius="sm"
+										color="primary"
+										variant="light"
+										onPress={resetSelectedCurveSettings}
+										className="px-1 min-w-0 w-12"
+									>
+										<RotateCcw size={20} />
+									</Button>
+								</div>
+								{curveSettingsConfig.length ? (
+									curveSettingsConfig.map(
+										(settings, index) => {
+											return (
+												<Slider
+													key={`${selectedCurveId}-${
+														settings.id
+													}`}
+													label={settings.label}
+													value={
+														selectedCurveSettings[
+															index
+														]
+													}
+													minValue={settings.min}
+													maxValue={settings.max}
+													defaultValue={
+														settings.defaultValue
+													}
+													step={settings.step}
+													setValue={(newValue) =>
+														updateSelectedCurveSetting(
+															index,
+															newValue
+														)
+													}
+												/>
+											);
+										}
+									)
+								) : (
+									<p className="text-sm text-gray-500">
+										There are no settings available for this
+										curve.
+									</p>
+								)}
+							</section>
+							<section>
+								<div className="flex justify-between items-center flex-wrap">
+									<h2 className="mb-0">Global settings</h2>
+									<Button
+										size="sm"
+										radius="sm"
+										color="primary"
+										variant="light"
+										onPress={resetGlobalSettings}
+										className="px-1 min-w-0 w-12"
+									>
+										<RotateCcw size={20} />
+									</Button>
+								</div>
+								{globalSettingsConfig.map((settings, index) => {
 									return (
 										<Slider
-											key={`${selectedCurveId}-${
-												// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
-												index
-											}`}
+											key={`global-${settings.id}`}
 											label={settings.label}
-											value={selectedCurveSettings[index]}
+											value={globalSettings[index]}
 											minValue={settings.min}
 											maxValue={settings.max}
 											defaultValue={settings.defaultValue}
 											step={settings.step}
 											setValue={(newValue) =>
-												updateSelectedCurveSetting(
+												updateGlobalSetting(
 													index,
 													newValue
 												)
 											}
 										/>
 									);
-								})
-							) : (
-								<p className="text-sm text-gray-500">
-									There are no settings available for this
-									curve.
-								</p>
-							)}
-						</section>
+								})}
+							</section>
+						</div>
 						<section>
-							<div className="flex justify-between items-center flex-wrap">
-								<h2 className="mb-0">Global settings</h2>
-								<Button
-									size="sm"
-									radius="sm"
-									color="primary"
-									variant="light"
-									onPress={resetGlobalSettings}
-									className="px-0"
+							<h2>About this curve</h2>
+							{(
+								selectedCurve.extendedDescription ?? [
+									selectedCurve.description,
+								]
+							).map((p, i) => (
+								<p
+									key={`${selectedCurve.id}-${i}`}
+									className={`text-sm text-gray-500${i ? ' mt-2' : ''}`}
 								>
-									<RotateCcw size={20} />
-								</Button>
-							</div>
-							{globalSettingsConfig.map((settings, index) => {
-								return (
-									<Slider
-										key={`global-${
-											// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
-											index
-										}`}
-										label={settings.label}
-										value={globalSettings[index]}
-										minValue={settings.min}
-										maxValue={settings.max}
-										defaultValue={settings.defaultValue}
-										step={settings.step}
-										setValue={(newValue) =>
-											updateGlobalSetting(index, newValue)
-										}
-									/>
-								);
-							})}
+									{p}
+								</p>
+							))}
 						</section>
-					</>
+					</div>
 				)}
 				<section>
 					<div className="flex justify-between items-center flex-wrap">
