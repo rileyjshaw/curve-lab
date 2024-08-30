@@ -152,19 +152,6 @@ function App() {
 		URL.revokeObjectURL(svgUrl);
 	}
 
-	// function getTransform() {
-	// 	if (ref.current) {
-	// 		console.log(
-	// 			[
-	// 				-ref.current.instance.transformState
-	// 					.positionX / width,
-	// 				-ref.current.instance.transformState
-	// 					.positionY / height,
-	// 			].join(', ')
-	// 		);
-	// 	}
-	// };
-
 	return (
 		<div className="min-h-dvh flex flex-col">
 			<Header />
@@ -172,34 +159,43 @@ function App() {
 				<section>
 					<div className="flex justify-between items-center mb-4 flex-wrap">
 						<h2 className="mb-0">Logo</h2>
-						<Tooltip
-							className="text-tiny text-default-500 rounded-md px-2 py-1 bg-white"
-							content="Zoom presets are only available for the wordmark"
-							placement="bottom"
-							isDisabled={isWordmark}
-						>
-							<ButtonGroup
+						<div className="flex">
+							<Tooltip
+								className="text-tiny text-default-500 rounded-md px-2 py-1 bg-white"
+								content="Zoom presets are only available for the wordmark"
+								placement="bottom"
+								isDisabled={isWordmark}
+							>
+								<ButtonGroup
+									size="sm"
+									radius="sm"
+									color="primary"
+									variant="light"
+								>
+									{notchLocations.map((_, idx) => (
+										<Button
+											// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
+											key={idx}
+											onPress={() => zoomToNotch(idx)}
+											className="shrink min-w-0"
+											isDisabled={!isWordmark}
+										>
+											{idx + 1}
+										</Button>
+									))}
+								</ButtonGroup>
+							</Tooltip>
+							<Button
+								onPress={resetZoom}
+								className="px-0"
 								size="sm"
 								radius="sm"
 								color="primary"
 								variant="light"
 							>
-								{notchLocations.map((_, idx) => (
-									<Button
-										// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
-										key={idx}
-										onPress={() => zoomToNotch(idx)}
-										className="shrink min-w-0"
-										isDisabled={!isWordmark}
-									>
-										{idx + 1}
-									</Button>
-								))}
-								<Button onPress={resetZoom} className="px-0">
-									<RotateCcw size={20} />
-								</Button>
-							</ButtonGroup>
-						</Tooltip>
+								<RotateCcw size={20} />
+							</Button>
+						</div>
 					</div>
 					{
 						<div ref={logoRef}>
@@ -226,93 +222,89 @@ function App() {
 						setCurveId={handleCurveTypeChange}
 					/>
 				</section>
-				<section>
-					<div className="flex justify-between items-center flex-wrap">
-						<h2 className="mb-0">Curve settings</h2>
-						<Button
-							isDisabled={!curveSettingsConfig.length}
-							size="sm"
-							radius="sm"
-							color="primary"
-							variant="light"
-							onPress={resetSelectedCurveSettings}
-							className="px-0"
-						>
-							<RotateCcw size={20} />
-						</Button>
-					</div>
-					{curveSettingsConfig.length ? (
-						curveSettingsConfig.map((settings, index) => {
-							return (
-								<Slider
-									key={`${selectedCurveId}-${
-										// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
-										index
-									}`}
-									label={settings.label}
-									value={selectedCurveSettings[index]}
-									minValue={settings.min}
-									maxValue={settings.max}
-									defaultValue={settings.defaultValue}
-									step={settings.step}
-									setValue={(newValue) =>
-										updateSelectedCurveSetting(
-											index,
-											newValue
-										)
-									}
-								/>
-							);
-						})
-					) : (
-						<p className="text-sm text-gray-500">
-							There are no settings available for this curve.
-						</p>
-					)}
-				</section>
-				<Tooltip
-					className="text-tiny text-default-500 rounded-md px-2 py-1 bg-white"
-					isDisabled={!isWordmark}
-					content="Global settings are not available for the wordmark"
-					placement="top"
-				>
-					<section>
-						<div className="flex justify-between items-center flex-wrap">
-							<h2 className="mb-0">Global settings</h2>
-							<Button
-								isDisabled={isWordmark}
-								size="sm"
-								radius="sm"
-								color="primary"
-								variant="light"
-								onPress={resetGlobalSettings}
-								className="px-0"
-							>
-								<RotateCcw size={20} />
-							</Button>
-						</div>
-						{globalSettingsConfig.map((settings, index) => {
-							return (
-								<Slider
-									key={`global-${
-										// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
-										index
-									}`}
-									isDisabled={isWordmark}
-									label={settings.label}
-									value={globalSettings[index]}
-									minValue={settings.min}
-									maxValue={settings.max}
-									defaultValue={settings.defaultValue}
-									step={settings.step}
-									setValue={(newValue) =>
-										updateGlobalSetting(index, newValue)
-									}
-								/>
-							);
-						})}
-					</section>
-				</Tooltip>
+				{!isWordmark && (
+					<>
+						<section>
+							<div className="flex justify-between items-center flex-wrap">
+								<h2 className="mb-0">Curve settings</h2>
+								<Button
+									isDisabled={!curveSettingsConfig.length}
+									size="sm"
+									radius="sm"
+									color="primary"
+									variant="light"
+									onPress={resetSelectedCurveSettings}
+									className="px-0"
+								>
+									<RotateCcw size={20} />
+								</Button>
+							</div>
+							{curveSettingsConfig.length ? (
+								curveSettingsConfig.map((settings, index) => {
+									return (
+										<Slider
+											key={`${selectedCurveId}-${
+												// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
+												index
+											}`}
+											label={settings.label}
+											value={selectedCurveSettings[index]}
+											minValue={settings.min}
+											maxValue={settings.max}
+											defaultValue={settings.defaultValue}
+											step={settings.step}
+											setValue={(newValue) =>
+												updateSelectedCurveSetting(
+													index,
+													newValue
+												)
+											}
+										/>
+									);
+								})
+							) : (
+								<p className="text-sm text-gray-500">
+									There are no settings available for this
+									curve.
+								</p>
+							)}
+						</section>
+						<section>
+							<div className="flex justify-between items-center flex-wrap">
+								<h2 className="mb-0">Global settings</h2>
+								<Button
+									size="sm"
+									radius="sm"
+									color="primary"
+									variant="light"
+									onPress={resetGlobalSettings}
+									className="px-0"
+								>
+									<RotateCcw size={20} />
+								</Button>
+							</div>
+							{globalSettingsConfig.map((settings, index) => {
+								return (
+									<Slider
+										key={`global-${
+											// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
+											index
+										}`}
+										label={settings.label}
+										value={globalSettings[index]}
+										minValue={settings.min}
+										maxValue={settings.max}
+										defaultValue={settings.defaultValue}
+										step={settings.step}
+										setValue={(newValue) =>
+											updateGlobalSetting(index, newValue)
+										}
+									/>
+								);
+							})}
+						</section>
+					</>
+				)}
 				<section>
 					<div className="flex justify-between items-center flex-wrap">
 						<h2>Controls</h2>
