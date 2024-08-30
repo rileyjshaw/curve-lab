@@ -87,7 +87,6 @@ function App() {
 		updateGlobalSetting,
 	} = useStore((state: State) => state);
 
-	const isWordmark = selectedCurveId === 0;
 	const selectedCurve = curveTypes[selectedCurveId];
 	const curveSettingsConfig = selectedCurve.settings;
 	const selectedCurveSettings = curveSettings[selectedCurveId];
@@ -100,6 +99,9 @@ function App() {
 	const deferredCurvePath = useDeferredValue(curvePath);
 	const deferredCurveTransform = useDeferredValue(curveTransform);
 	// const isPathCurrent = deferredCurvePath === curvePath && deferredCurveTransform === curveTransform && deferredGlobalSettings === globalSettings;
+
+	// HACK: Prevent flash when switching between wordmark and logo.
+	const isWordmark = selectedCurveId === 0 || !deferredCurvePath;
 
 	function resetZoom() {
 		if (transformWrapperRef.current) {

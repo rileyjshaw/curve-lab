@@ -102,7 +102,7 @@ const Logo = React.forwardRef(function Logo(
 			<clipPath id="clip-circle">
 				<use href="#outer-circle" />
 			</clipPath>
-			<g clip-path="url(#clip-circle)">
+			<g clipPath="url(#clip-circle)">
 				<path d={curvePath} transform={curveTransform} />
 				<line
 					x1="50"
@@ -136,7 +136,7 @@ const WrappedLogo = React.memo(
 		props: WrappedLogoProps,
 		ref: React.Ref<ReactZoomPanPinchRef>
 	) {
-		if (props.width == null || !props.curvePath) {
+		if (props.width == null || !(props.curvePath || props.isWordmark)) {
 			return null;
 		}
 
