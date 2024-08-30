@@ -56,13 +56,14 @@ export const curveTypes: CurveType[] = [
 			'I think this is the best one; no point pretending otherwise.',
 		],
 		path: (
-			curveHeight: number,
+			height: number,
+			horizontalOffset: number,
 			verticalOffset: number,
 			rotation: number,
 			strokeWidth: number
 		) => {
 			return [
-				`M${strokeWidth / 2} ${50 - verticalOffset}Q 25,${50 - curveHeight} 50,50 T${100 - strokeWidth / 2} ${50 + verticalOffset}`,
+				`M${strokeWidth / 2} ${50 - verticalOffset}Q ${25 + horizontalOffset},${50 - height} 50,50 T${100 - strokeWidth / 2} ${50 + verticalOffset}`,
 				`rotate(${rotation} 50 50)`,
 			];
 		},
@@ -72,6 +73,12 @@ export const curveTypes: CurveType[] = [
 				min: 10,
 				max: 50,
 				defaultValue: 30,
+			},
+			{
+				label: 'Horizontal offset',
+				min: -25,
+				max: 25,
+				defaultValue: 3,
 			},
 			{
 				label: 'Vertical offset',
@@ -97,7 +104,7 @@ export const curveTypes: CurveType[] = [
 			'I also think it looks too straight in the middle.',
 		],
 		path: (
-			curveHeight: number,
+			height: number,
 			period: number,
 			rotation: number,
 			strokeWidth: number
@@ -113,7 +120,7 @@ export const curveTypes: CurveType[] = [
 					-Math.sin(
 						((i / 99) * period + periodOffset) * Math.PI * 2
 					) *
-						curveHeight +
+						height +
 					50;
 				return `${x} ${y}`;
 			});
