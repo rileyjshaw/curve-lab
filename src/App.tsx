@@ -15,13 +15,14 @@ import { curveTypes, globalSettingsConfig, notchLocations } from './constants';
 import Slider from './Slider';
 
 interface State {
-	curveId: number;
-	allCurveSettings: number[][];
+	selectedCurveId: number;
+	curveSettings: number[][];
 	globalSettings: number[];
-	setCurveId: (id: number) => void;
-	resetCurrentSettings: () => void;
+	setSelectedCurveId: (id: number) => void;
+	resetSelectedCurveSettings: () => void;
+	resetCurveSettings: () => void;
 	resetGlobalSettings: () => void;
-	updateCurveSetting: (settingId: number, newValue: number) => void;
+	updateSelectedCurveSetting: (settingId: number, newValue: number) => void;
 	updateGlobalSetting: (settingId: number, newValue: number) => void;
 }
 
@@ -35,29 +36,31 @@ const defaultGlobalSettings = globalSettingsConfig.map(
 
 const useStore = create<State>()(
 	devtools((set) => ({
-		curveId: 0,
-		allCurveSettings: defaultCurveSettings,
+		selectedCurveId: 0,
+		curveSettings: defaultCurveSettings,
 		globalSettings: defaultGlobalSettings,
 
-		setCurveId: (id: number) => set({ curveId: id }),
-		resetCurrentSettings: () =>
+		setSelectedCurveId: (id: number) => set({ selectedCurveId: id }),
+		resetSelectedCurveSettings: () =>
 			set((state) => {
-				const allCurveSettings = [...state.allCurveSettings];
-				allCurveSettings[state.curveId] =
-					defaultCurveSettings[state.curveId];
-				return { allCurveSettings };
+				const curveSettings = [...state.curveSettings];
+				curveSettings[state.selectedCurveId] =
+					defaultCurveSettings[state.selectedCurveId];
+				return { curveSettings };
 			}),
+		resetCurveSettings: () =>
+			set(() => ({ curveSettings: defaultCurveSettings })),
 		resetGlobalSettings: () =>
 			set(() => ({ globalSettings: defaultGlobalSettings })),
-		updateCurveSetting: (settingId, newValue) =>
+		updateSelectedCurveSetting: (settingId, newValue) =>
 			set((state) => {
-				const allCurveSettings = [...state.allCurveSettings];
+				const curveSettings = [...state.curveSettings];
 				const selectedCurveSettings = [
-					...allCurveSettings[state.curveId],
+					...curveSettings[state.selectedCurveId],
 				];
 				selectedCurveSettings[settingId] = newValue;
-				allCurveSettings[state.curveId] = selectedCurveSettings;
-				return { allCurveSettings };
+				curveSettings[state.selectedCurveId] = selectedCurveSettings;
+				return { curveSettings };
 			}),
 		updateGlobalSetting: (settingId, newValue) =>
 			set((state) => {
@@ -73,25 +76,26 @@ function App() {
 	const transformWrapperRef = useRef<ReactZoomPanPinchRef | null>(null);
 	const downloadRef = useRef<SVGSVGElement | null>(null);
 	const {
-		curveId,
-		setCurveId,
-		allCurveSettings,
+		selectedCurveId,
+		setSelectedCurveId,
+		curveSettings,
 		globalSettings,
-		resetCurrentSettings,
+		resetSelectedCurveSettings,
+		resetCurveSettings,
 		resetGlobalSettings,
-		updateCurveSetting,
+		updateSelectedCurveSetting,
 		updateGlobalSetting,
 	} = useStore((state: State) => state);
 
-	const isWordmark = curveId === 0;
-	const selectedCurve = curveTypes[curveId];
+	const isWordmark = selectedCurveId === 0;
+	const selectedCurve = curveTypes[selectedCurveId];
 	const curveSettingsConfig = selectedCurve.settings;
-	const curveSettings = allCurveSettings[curveId];
+	const selectedCurveSettings = curveSettings[selectedCurveId];
 	const deferredGlobalSettings = useDeferredValue(globalSettings);
 
 	const [curvePath, curveTransform] =
 		typeof selectedCurve.path === 'function'
-			? selectedCurve.path(...curveSettings, ...globalSettings)
+			? selectedCurve.path(...selectedCurveSettings, ...globalSettings)
 			: selectedCurve.path;
 	const deferredCurvePath = useDeferredValue(curvePath);
 	const deferredCurveTransform = useDeferredValue(curveTransform);
@@ -125,7 +129,7 @@ function App() {
 
 	function handleCurveTypeChange(id: number) {
 		resetZoom();
-		setCurveId(id);
+		setSelectedCurveId(id);
 	}
 
 	function downloadSvg() {
@@ -218,7 +222,7 @@ function App() {
 				<section>
 					<h2>Curve type</h2>
 					<CurveTypeSelector
-						curveId={curveId}
+						curveId={selectedCurveId}
 						setCurveId={handleCurveTypeChange}
 					/>
 				</section>
@@ -231,7 +235,7 @@ function App() {
 							radius="sm"
 							color="primary"
 							variant="light"
-							onPress={resetCurrentSettings}
+							onPress={resetSelectedCurveSettings}
 							className="px-0"
 						>
 							<RotateCcw size={20} />
@@ -241,18 +245,21 @@ function App() {
 						curveSettingsConfig.map((settings, index) => {
 							return (
 								<Slider
-									key={`${curveId}-${
+									key={`${selectedCurveId}-${
 										// biome-ignore lint/suspicious/noArrayIndexKey: These IDs are unique and fixed.
 										index
 									}`}
 									label={settings.label}
-									value={curveSettings[index]}
+									value={selectedCurveSettings[index]}
 									minValue={settings.min}
 									maxValue={settings.max}
 									defaultValue={settings.defaultValue}
 									step={settings.step}
 									setValue={(newValue) =>
-										updateCurveSetting(index, newValue)
+										updateSelectedCurveSetting(
+											index,
+											newValue
+										)
 									}
 								/>
 							);
@@ -321,7 +328,7 @@ function App() {
 						</Button>
 						<Button
 							onPress={() => {
-								resetCurrentSettings();
+								resetCurveSettings();
 								resetGlobalSettings();
 								resetZoom();
 							}}
